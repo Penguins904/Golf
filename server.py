@@ -5,10 +5,11 @@ from game import *
 from http import HTTPStatus
 import functools
 import os
+import socket
 
 
 PORT = 8080
-IP = "192.168.86.50"
+IP = socket.gethostbyname(socket.gethostname())
 NUMOFPLAYERS = 2
 
 games = set() #collection of all games
