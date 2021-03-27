@@ -3,7 +3,7 @@ import asyncio
 import websockets
 import json
 
-class Card(object):
+class Card: #handles methods for individual cards
     #name: 2, 3, 4...J, Q, K, A
     #suit: diamonds, hearts, clubs, spades
     #color: red, black
@@ -36,13 +36,13 @@ class Card(object):
         else:
             self.isFaceCard = False
 
-    def flip(self):
+    def flip(self): #might not be needed
         if self.isFlipped:
             print("Card == already flipped")
             raise ValueError
         self.isFlipped = True
 
-    def toHTML(self):
+    def toHTML(self): #converts Card object to HTML character code
         num = 0
         if self.suit == "spades":
             num =  127137 + Card.namesList.index(self.name) + int(Card.namesList.index(self.name) > Card.namesList.index("J"))
@@ -58,7 +58,7 @@ class Card(object):
         return "<name: " + self.name + ",\t" + "suit: " + self.suit + "flipped:" + self.isFlipped + ">"
 
 
-class Deck:
+class Deck: #may not be needed
 
     def __init__(self):
         self.cardList = []
@@ -78,21 +78,22 @@ class Game:
     async def start(self):
         print(" a game has started")
         self.deck.shuffle()
+
+        #gives players cards
         for player in self.players:
             player.cards = self.deck.cardList[:4]
             del self.deck.cardList[:4]
 
-        done, pending = await asyncio.wait([player.sendData({"action": "give", "cards": [card.toHTML() for card in player.cards]}) for player in self.players])
-        for task in pending:
-            task.cancel()
+        #sends start message and gives cards to client
+        await asyncio.wait([player.sendData({"action": "give", "cards": [card.toHTML() for card in player.cards]}) for player in self.players])
         await self.sendAll({"action": "start"})
 
 
-    async def sendAll(self, data):
+    async def sendAll(self, data): #sends a message to all players in a game
             await asyncio.wait([player.sendData(data) for player in self.players])
 
 
-    def turn(self, player, turnNumber):
+    def turn(self, player, turnNumber): #function for each turn of the game
 
         sum = 0
         for card in player.cards:
@@ -113,6 +114,6 @@ class Player:
         self.isTurn = False
 
 
-    async def sendData(self, data):
+    async def sendData(self, data): #sends data to specific player
         print(json.dumps(data))
         await self.socket.send(json.dumps(data))

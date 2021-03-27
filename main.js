@@ -1,25 +1,25 @@
 var div = document.getElementsByClassName("cards")[0]
 var cardElements = [].slice.call(div.getElementsByTagName("span"));
 var cards = []
-var hasStarted, isTurn = false;
+var hasStarted, isTurn = false; //game has started bool
 
 for(let e of cardElements) {
   e.addEventListener("click", function(){flip(e)})
   if(cardElements.indexOf(e) > 1){
-    e.addEventListener("mouseover", function(){showCard(e)});
-    e.addEventListener("mouseout", function(){hideCard(e)});
+    e.addEventListener("mouseover", function(){showCard(e)}); //clicking flips card
+    e.addEventListener("mouseout", function(){hideCard(e)}); //shows bottom cards when hovering
   }
 }
 
 
 
-var ws = new WebSocket("ws://" + window.location.host)
+var ws = new WebSocket("ws://" + window.location.host) // creates socket
 ws.onopen = function(event) {
   console.log("Connected");
   console.log("waiting for game to start");
 };
 
-ws.onmessage = function(event) {
+ws.onmessage = function(event) { //runs when socket recives a message
   data = JSON.parse(event.data);
   console.log(data);
   switch (data.action) {
@@ -40,7 +40,7 @@ ws.onmessage = function(event) {
 };
 
 function flip(element) {
-  ws.send(JSON.stringify({"action": "flip", "card": element.id}));
+  //ws.send(JSON.stringify({"action": "flip", "card": element.id}));
 }
 
 function showCard(element) {
@@ -50,7 +50,7 @@ function showCard(element) {
 }
 
 function hideCard(element) {
-  element.innerHTML = "&#127136;";
+  element.innerHTML = "&#127136;"; //HTML character code for back of a card
 }
 
 function start() {

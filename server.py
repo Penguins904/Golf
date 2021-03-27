@@ -11,18 +11,18 @@ PORT = 8080
 IP = "192.168.86.50"
 NUMOFPLAYERS = 2
 
-games = set()
+games = set() #collection of all games
 games.add(Game())
 
 
 
-MIME_TYPES = {
+MIME_TYPES = { #for GET requests
     "html": "text/html",
     "js": "text/javascript",
     "css": "text/css"
 }
 
-async def process_request(sever_root, path, request_headers):
+async def process_request(sever_root, path, request_headers): #Handels GET requests. Found online. May delete and use GitHub pages
     """Serves a file when doing a GET request with a valid path."""
 
     if "Upgrade" in request_headers:
@@ -66,7 +66,7 @@ async def regester(websocket, path):
     print(f"{websocket.remote_address} connected")
     player = Player(websocket)
     bool = True
-    for game in games:
+    for game in games:  #adds player to game if there is room
         if len(game.players) < NUMOFPLAYERS:
             bool = False
             await addToGame(game, player)
@@ -78,7 +78,7 @@ async def regester(websocket, path):
         game = Game()
         await addToGame(game, player)
 
-
+#starts server
 handler = functools.partial(process_request, os.getcwd())
 start_server = websockets.serve(regester, IP, PORT,
                                     process_request=handler)
