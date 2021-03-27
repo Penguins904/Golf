@@ -1,0 +1,10 @@
+span {
+  font-size: 128px;
+  text-align: center;
+  padding: 10px;
+  display: inline-block;
+}
+
+.cards {
+  text-align: center;
+}

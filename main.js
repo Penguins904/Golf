@@ -1,0 +1,65 @@
+var div = document.getElementsByClassName("cards")[0]
+var cardElements = [].slice.call(div.getElementsByTagName("span"));
+var cards = []
+var hasStarted, isTurn = false;
+
+for(let e of cardElements) {
+  e.addEventListener("click", function(){flip(e)})
+  if(cardElements.indexOf(e) > 1){
+    e.addEventListener("mouseover", function(){showCard(e)});
+    e.addEventListener("mouseout", function(){hideCard(e)});
+  }
+}
+
+
+
+var ws = new WebSocket("ws://" + window.location.host)
+ws.onopen = function(event) {
+  console.log("Connected");
+  console.log("waiting for game to start");
+};
+
+ws.onmessage = function(event) {
+  data = JSON.parse(event.data);
+  console.log(data);
+  switch (data.action) {
+    case "start":
+      start();
+      break;
+    case "give":
+      give(data.cards);
+      break;
+    case "playerJoined":
+      alert("number of players: " + data.players + "/" + data.max);
+      console.log("number of players: " + data.players + "/" + data.max);
+      break;
+    case "test":
+      console.log("test");
+      break;
+  }
+};
+
+function flip(element) {
+  ws.send(JSON.stringify({"action": "flip", "card": element.id}));
+}
+
+function showCard(element) {
+  if(hasStarted) {
+    element.innerHTML = cards[cardElements.indexOf(element)];
+  }
+}
+
+function hideCard(element) {
+  element.innerHTML = "&#127136;";
+}
+
+function start() {
+  hasStarted = true;
+  alert("Game has Started");
+  console.log("Game has Started");
+}
+
+function give(c) {
+  console.log("recived cards");
+  cards = c;
+}
