@@ -13,7 +13,7 @@ for(let e of cardElements) {
 
 
 
-var ws = new WebSocket("wss://golfcardgame.ddns.net") // creates socket
+var ws = new WebSocket("wss://golfcardgame.ddns.net:8080") // creates socket
 ws.onopen = function(event) {
   console.log("Connected");
   console.log("waiting for game to start");
