@@ -8,7 +8,7 @@ import os
 import socket
 
 
-PORT = 8080
+PORT = 443
 IP = socket.gethostbyname(socket.gethostname())
 NUMOFPLAYERS = 2
 
