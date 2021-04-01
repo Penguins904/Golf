@@ -1,7 +1,3 @@
-alert("open the link and accept the certificate")
-window.open("https://golfcardgame.ddns.net")
-
-
 var div = document.getElementsByClassName("cards")[0]
 var cardElements = [].slice.call(div.getElementsByTagName("span"));
 var cards = []
@@ -15,9 +11,11 @@ for(let e of cardElements) {
   }
 }
 
+ws =  new WebSocket("wss://golfcardgame.ddns.net");
+ws.onerror = function(event) {
+  alert("error")
+}
 
-
-var ws = new WebSocket("wss://golfcardgame.ddns.net") // creates socket
 ws.onopen = function(event) {
   console.log("Connected");
   console.log("waiting for game to start");
