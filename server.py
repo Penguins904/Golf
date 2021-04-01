@@ -1,11 +1,10 @@
 import asyncio
 import websockets
 import json
-from game import *
-from http import HTTPStatus
-import functools
 import os
 import socket
+import ssl
+from game import *
 
 
 PORT = 443
@@ -35,8 +34,12 @@ async def regester(websocket, path):
         game = Game()
         await addToGame(game, player)
 
+#open certificate
+ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+ssl_context.load_cert_chain(certfile= os.path.join(".\\TLS", "cert.pem"), keyfile= os.path.join(".\\TLS", "key.pem"), password= "Ifish")
+
 #starts server
-start_server = websockets.serve(regester, IP, PORT)
+start_server = websockets.serve(regester, IP, PORT, ssl = ssl_context)
 print(f"Starting Server on {IP}:{PORT}")
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
