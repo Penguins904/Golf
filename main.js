@@ -1,3 +1,7 @@
+alert("open the link and accept the certificate")
+window.open("https://golfcardgame.ddns.net")
+
+
 var div = document.getElementsByClassName("cards")[0]
 var cardElements = [].slice.call(div.getElementsByTagName("span"));
 var cards = []
