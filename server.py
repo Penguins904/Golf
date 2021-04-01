@@ -36,7 +36,7 @@ async def regester(websocket, path):
 
 #open certificate
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-ssl_context.load_cert_chain(certfile= os.path.join(".\\TLS", "cert.pem"), keyfile= os.path.join(".\\TLS", "key.pem"), password= "Ifish")
+ssl_context.load_cert_chain(certfile= os.path.join(".\\TLS", "cert.pem"), keyfile= os.path.join(".\\TLS", "key.pem"))
 
 #starts server
 start_server = websockets.serve(regester, IP, PORT, ssl = ssl_context)
